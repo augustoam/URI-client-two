@@ -6,7 +6,6 @@ class TimeController < ActionController::API
   end
 
   def get_time
-    debugger
     if Timer.any?
       render json: Timer.last.time
     else

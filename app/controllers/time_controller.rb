@@ -1,11 +1,16 @@
 class TimeController < ActionController::API
-  def get_time
-    render json: {time: Time.now}
+  include MqttBroker
+
+  def publish_time_mqtt
+    publish_mqtt('uri/sistemas-distribuidos/time', 'two ' + params[:time].to_s)
   end
 
-  def set_time
-    # debugger
-    Timer.create!(time: params[:time])
-    render json: :ok, status: :ok
+  def get_time
+    debugger
+    if Timer.any?
+      render json: Timer.last.time
+    else
+      render json: Time.now
+    end
   end
 end
